@@ -59,7 +59,7 @@ class SleepTrackerViewModel(
 
     //since nights will be a mutable list of nights, we can just assign the button to nights but it
     //would only show a reference so we need to do some SimpleDateFormatting
-    private val nights = database.getAllNights()
+    val nights = database.getAllNights()
 
     val nightsString = nights.map { nights ->
         formatNights(
@@ -74,8 +74,8 @@ class SleepTrackerViewModel(
     val stopButtonVisible = tonight.map {
         null != it
     }
-    val clearButtonVisible = tonight.map {
-        it.toString().isNotEmpty()
+    val clearButtonVisible = nights.map {
+        it?.isNotEmpty()
     }
 
     private var _showSnackbarEvent = MutableLiveData<Boolean>()
