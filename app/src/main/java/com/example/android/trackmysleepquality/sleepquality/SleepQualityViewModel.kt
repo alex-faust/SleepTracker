@@ -37,7 +37,7 @@ class SleepQualityViewModel(
 
     fun onSetSleepQuality(quality: Int) {
         viewModelScope.launch {
-            val tonight = database.get(sleepNightKey) ?: return@launch
+            val tonight = database.get(sleepNightKey)
             tonight.sleepQuality = quality
             database.update(tonight)
 

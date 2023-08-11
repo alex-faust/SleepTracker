@@ -63,6 +63,16 @@ class SleepTrackerFragment : Fragment() {
         )[SleepTrackerViewModel::class.java]
 
         binding.sleepTrackerViewModel = sleepTrackerViewModel
+
+        val adapter = SleepNightAdapter()
+        binding.sleepList.adapter = adapter
+
+        sleepTrackerViewModel.nights.observe(viewLifecycleOwner) {
+            it?.let {
+                //adapter.data = it
+                adapter.submitList(it)
+            }
+        }
         //this is so the binding can observe live data updates
         binding.lifecycleOwner = this
 
