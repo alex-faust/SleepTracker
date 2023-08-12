@@ -86,6 +86,10 @@ class SleepTrackerViewModel(
         _showSnackbarEvent.value = false
     }
 
+    private val _navigateToSleepDataQuality = MutableLiveData<Long>()
+    val navigateToSleepDataQuality
+        get() = _navigateToSleepDataQuality
+
     //snackbar is a UI thing and should happen in the fragment but deciding to
     // show it happens in the viewmodel
 
@@ -96,6 +100,7 @@ class SleepTrackerViewModel(
     fun doneNavigating() {
         _navigateToSleepQuality.value = null
     }
+
     init {
         //we need the night set so we initialize it as soon as possible to work with it
         initializeTonight()
@@ -130,15 +135,15 @@ class SleepTrackerViewModel(
     }
 
     private suspend fun insert(night: SleepNight) {
-            database.insert(night)
+        database.insert(night)
     }
 
     private suspend fun update(night: SleepNight) {
-            database.update(night)
+        database.update(night)
     }
 
     private suspend fun clear() {
-            database.clear()
+        database.clear()
     }
 
     fun onStopTracking() {
@@ -161,6 +166,14 @@ class SleepTrackerViewModel(
         }
     }
 
+    fun onSleepNightClicked(id: Long) {
+        _navigateToSleepDataQuality.value = id
+    }
+
+    //tells the view model that you are done with the navigation
+    fun onSleepDataQualityNavigated() {
+        _navigateToSleepDataQuality.value = null
+    }
     /*
     *
     Dispatchers.Main - Use this dispatcher to run a coroutine on the main Android thread. This

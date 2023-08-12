@@ -13,8 +13,9 @@ import com.example.android.trackmysleepquality.databinding.ListItemSleepNightBin
 //Without DiffUtil, submitting new list would reset the scroll position to
 // beginning which will not be a good user experience. ListAdapter overcomes
 // this by enforcing the implementation in a safe and simple way.
-class SleepNightAdapter:
-    ListAdapter<SleepNight, SleepNightAdapter.ViewHolder>(SleepNightDiffCallback()) {
+class SleepNightAdapter(private val clickListener: SleepNightListener):
+                        ListAdapter<SleepNight,
+                                SleepNightAdapter.ViewHolder>(SleepNightDiffCallback()) {
 
     /* since we are subclassing ListAdapter, we dont need to define this, ListAdapter will do this for us
     var data = listOf<SleepNight>()
@@ -29,8 +30,9 @@ class SleepNightAdapter:
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item)
+        /*val item = getItem(position)
+        holder.bind(item)*/
+        holder.bind(getItem(position)!!, clickListener)
     }
 
     //since we are subclassing ListAdapter, we dont need to define this, ListAdapter will do this for us
@@ -47,8 +49,9 @@ class SleepNightAdapter:
         val quality: TextView = binding.qualityString
         val qualityImage: ImageView = binding.qualityImage*/
 
-        fun bind(item: SleepNight) {
+        fun bind(item: SleepNight, clickListener: SleepNightListener) {
             binding.sleep = item
+            binding.clickListener = clickListener
             binding.executePendingBindings() //have to use this when binding rvs
         }
         /*
@@ -99,6 +102,10 @@ class SleepNightAdapter:
         override fun areContentsTheSame(oldItem: SleepNight, newItem: SleepNight): Boolean {
             return oldItem == newItem
         }
-
     }
+}
+
+class SleepNightListener(val clickListener: (sleeId: Long) -> Unit){
+    fun onClick(night: SleepNight) = clickListener(night.nightId)
+
 }
